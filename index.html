@@ -1,0 +1,663 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APAAR Bridge | Admin Dashboard</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f3f6fc;
+    color: #202b45;
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 245px;
+    background: #14213d;
+    color: white;
+    padding: 25px 15px;
+    position: fixed;
+    height: 100vh;
+}
+
+.logo {
+    font-size: 23px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.logo span {
+    color: #55d6be;
+}
+
+.tagline {
+    font-size: 11px;
+    color: #aab8d0;
+    margin-bottom: 35px;
+}
+
+.sidebar h4 {
+    color: #8797b5;
+    font-size: 11px;
+    margin: 20px 10px 12px;
+}
+
+.sidebar a {
+    display: block;
+    padding: 13px 12px;
+    color: #dce5f5;
+    text-decoration: none;
+    border-radius: 7px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+    background: #29436d;
+    color: #55d6be;
+}
+
+.main {
+    margin-left: 245px;
+    width: calc(100% - 245px);
+}
+
+header {
+    background: white;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px #00000008;
+}
+
+header h2 {
+    font-size: 21px;
+}
+
+.profile {
+    color: #52627b;
+    font-size: 14px;
+}
+
+.content {
+    padding: 30px;
+}
+
+.welcome {
+    margin-bottom: 25px;
+}
+
+.welcome h2 {
+    font-size: 25px;
+    margin-bottom: 8px;
+}
+
+.welcome p {
+    color: #718096;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.card {
+    background: white;
+    padding: 23px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px #00000008;
+}
+
+.card p {
+    color: #718096;
+    font-size: 13px;
+}
+
+.card h2 {
+    font-size: 28px;
+    margin-top: 12px;
+    color: #1b3765;
+}
+
+.card small {
+    color: #159b80;
+}
+
+.panel {
+    background: white;
+    border-radius: 12px;
+    padding: 23px;
+    margin-bottom: 22px;
+    box-shadow: 0 3px 12px #00000008;
+}
+
+.panel h3 {
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+}
+
+th, td {
+    text-align: left;
+    padding: 15px 12px;
+    border-bottom: 1px solid #edf0f5;
+    font-size: 13px;
+}
+
+th {
+    color: #718096;
+    background: #f8faff;
+}
+
+.status {
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+}
+
+.valid {
+    background: #d9f8e9;
+    color: #168052;
+}
+
+.pending {
+    background: #fff1cc;
+    color: #a66a00;
+}
+
+.flagged {
+    background: #ffe0e0;
+    color: #c03939;
+}
+
+button {
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    background: #2456a6;
+    color: white;
+}
+
+button:hover {
+    opacity: .85;
+}
+
+input, select {
+    padding: 11px;
+    border: 1px solid #dce2ec;
+    border-radius: 6px;
+    margin: 7px 5px 7px 0;
+    max-width: 100%;
+}
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+.progress {
+    background: #e8edf5;
+    height: 10px;
+    border-radius: 10px;
+    margin: 15px 0;
+}
+
+.progress div {
+    background: #27b99a;
+    height: 10px;
+    border-radius: 10px;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    color: #8a95a8;
+    font-size: 12px;
+}
+
+@media(max-width:900px) {
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width:600px) {
+    .sidebar {
+        width: 175px;
+    }
+    .main {
+        margin-left: 175px;
+        width: calc(100% - 175px);
+    }
+    .content {
+        padding: 15px;
+    }
+    .stats {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<aside class="sidebar">
+    <div class="logo">APAAR <span>BRIDGE</span></div>
+    <div class="tagline">ONE STUDENT. ONE TRUSTED RECORD.</div>
+
+    <h4>MAIN MENU</h4>
+    <a class="active" onclick="showPage('dashboard',this)">▦ Dashboard</a>
+    <a onclick="showPage('students',this)">♙ Student Records</a>
+    <a onclick="showPage('verification',this)">✓ APAAR Verification</a>
+    <a onclick="showPage('duplicates',this)">↔ Duplicate Detection</a>
+    <a onclick="showPage('certificates',this)">▤ Certificates</a>
+    <a onclick="showPage('exceptions',this)">⚑ Exception Queue</a>
+    <a onclick="showPage('audit',this)">◷ Audit Trail</a>
+    <a onclick="showPage('reports',this)">↓ Reports</a>
+</aside>
+
+<main class="main">
+
+<header>
+    <h2 id="pageTitle">Dashboard</h2>
+    <div class="profile">Admin Console | Administrator</div>
+</header>
+
+<div class="content">
+
+<!-- DASHBOARD -->
+<section id="dashboard" class="page active">
+
+<div class="welcome">
+    <h2>Welcome to APAAR Bridge 👋</h2>
+    <p>Monitor student records, verification and institutional data quality.</p>
+</div>
+
+<div class="stats">
+    <div class="card">
+        <p>Total Student Records</p>
+        <h2 id="totalStudents">12480</h2>
+        <small>All institutions</small>
+    </div>
+
+    <div class="card">
+        <p>Ready to Review</p>
+        <h2 id="pendingCount">326</h2>
+        <small>Requires attention</small>
+    </div>
+
+    <div class="card">
+        <p>Data Completeness</p>
+        <h2>96.4%</h2>
+        <small>Overall quality</small>
+    </div>
+
+    <div class="card">
+        <p>Institutions</p>
+        <h2>42</h2>
+        <small>Registered institutions</small>
+    </div>
+</div>
+
+<div class="panel">
+    <h3>Data Quality Overview</h3>
+
+    <p>Validated Records - 85%</p>
+    <div class="progress"><div style="width:85%"></div></div>
+
+    <p>Pending Review - 10%</p>
+    <div class="progress"><div style="width:10%;background:#f3b43f"></div></div>
+
+    <p>Needs Correction - 5%</p>
+    <div class="progress"><div style="width:5%;background:#e76b6b"></div></div>
+</div>
+
+<div class="panel">
+    <h3>Latest Exceptions</h3>
+    <div class="table-wrap">
+    <table>
+        <tr><th>Issue</th><th>Action Required</th><th>Status</th></tr>
+        <tr><td>APAAR ID Repeated</td><td>Review Duplicate</td><td><span class="status flagged">Flagged</span></td></tr>
+        <tr><td>Admission Year Missing</td><td>Return to College</td><td><span class="status pending">Pending</span></td></tr>
+        <tr><td>Intake Threshold Reached</td><td>Check Approved Limit</td><td><span class="status flagged">Flagged</span></td></tr>
+    </table>
+    </div>
+</div>
+</section>
+
+<!-- STUDENTS -->
+<section id="students" class="page">
+    <div class="panel">
+        <h3>Student Management</h3>
+        <div class="actions">
+            <input type="text" id="searchStudent" placeholder="Search student..." oninput="renderStudents()">
+            <button onclick="document.getElementById('studentForm').style.display='block'">+ Add Student</button>
+        </div>
+
+        <div id="studentForm" style="display:none">
+            <h3>Add Student Details</h3>
+            <input id="studentName" placeholder="Student Name">
+            <input id="apaarId" placeholder="APAAR ID">
+            <input id="college" placeholder="College Name">
+            <input id="year" placeholder="Admission Year" type="number">
+            <button onclick="addStudent()">Save Student</button>
+        </div>
+
+        <div class="table-wrap">
+        <table>
+            <thead>
+            <tr><th>Name</th><th>APAAR ID</th><th>Institution</th><th>Year</th><th>Status</th></tr>
+            </thead>
+            <tbody id="studentTable"></tbody>
+        </table>
+        </div>
+    </div>
+</section>
+
+<!-- VERIFICATION -->
+<section id="verification" class="page">
+    <div class="panel">
+        <h3>APAAR ID Validation</h3>
+        <p>Enter a student APAAR ID to perform basic format validation.</p>
+        <input id="verifyId" placeholder="Enter APAAR ID">
+        <button onclick="verifyStudent()">Validate ID</button>
+        <p id="verifyResult" style="margin-top:20px"></p>
+        <p style="margin-top:15px;color:#718096;font-size:13px">
+            Note: Format validation does not confirm identity or official APAAR status.
+            Official verification requires authorised API access.
+        </p>
+    </div>
+</section>
+
+<!-- DUPLICATES -->
+<section id="duplicates" class="page">
+    <div class="panel">
+        <h3>Duplicate Detection</h3>
+        <p>Identify repeated APAAR IDs in the available student records.</p>
+        <br>
+        <button onclick="detectDuplicates()">Scan Records</button>
+        <div id="duplicateResult" style="margin-top:20px"></div>
+    </div>
+</section>
+
+<!-- CERTIFICATES -->
+<section id="certificates" class="page">
+    <div class="panel">
+        <h3>Certificate Verification</h3>
+        <p>Upload a certificate for prototype review.</p>
+        <br>
+        <input type="file" id="certificateFile" accept=".pdf,.jpg,.jpeg,.png">
+        <button onclick="uploadCertificate()">Upload Certificate</button>
+        <p id="certificateResult" style="margin-top:20px"></p>
+        <p style="color:#718096;font-size:13px;margin-top:15px">
+            Prototype upload only. AI-based authenticity checks and issuer verification
+            require backend integration.
+        </p>
+    </div>
+</section>
+
+<!-- EXCEPTIONS -->
+<section id="exceptions" class="page">
+    <div class="panel">
+        <h3>Exception Queue</h3>
+        <div class="table-wrap">
+        <table>
+            <tr><th>Issue</th><th>Description</th><th>Status</th></tr>
+            <tr><td>Duplicate APAAR ID</td><td>Repeated student identifier</td><td><span class="status flagged">Flagged</span></td></tr>
+            <tr><td>Missing Details</td><td>Admission year unavailable</td><td><span class="status pending">Pending</span></td></tr>
+            <tr><td>Certificate Issue</td><td>Requires manual review</td><td><span class="status flagged">Flagged</span></td></tr>
+        </table>
+        </div>
+    </div>
+</section>
+
+<!-- AUDIT -->
+<section id="audit" class="page">
+    <div class="panel">
+        <h3>Audit Trail</h3>
+        <div class="table-wrap">
+        <table>
+            <tr><th>Action</th><th>User</th><th>Date & Time</th></tr>
+            <tbody id="auditTable">
+            <tr><td>Dashboard Opened</td><td>Admin</td><td>Current Session</td></tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+</section>
+
+<!-- REPORTS -->
+<section id="reports" class="page">
+    <div class="panel">
+        <h3>Download Reports</h3>
+        <p>Export the student records currently available in this prototype.</p>
+        <br>
+        <button onclick="downloadReport()">Download Student CSV</button>
+    </div>
+</section>
+
+</div>
+
+<footer>
+    APAAR BRIDGE | SIH26263 | Prototype Dashboard
+    <br><br>
+    Demo data only – Not connected to live AICTE or APAAR services.
+</footer>
+
+</main>
+</div>
+
+<script>
+
+// Demo student data
+let students = [
+    {name:"Rahul Kumar", id:"APAAR10001", college:"ABC Engineering College", year:"2024", status:"Validated"},
+    {name:"Priya Sharma", id:"APAAR10002", college:"XYZ College", year:"2023", status:"Pending"},
+    {name:"Anjali Reddy", id:"APAAR10003", college:"ABC Engineering College", year:"2024", status:"Validated"},
+    {name:"Kiran Kumar", id:"APAAR10001", college:"XYZ College", year:"2023", status:"Flagged"}
+];
+
+function showPage(page, element) {
+    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+    document.getElementById(page).classList.add("active");
+
+    document.querySelectorAll(".sidebar a").forEach(a => a.classList.remove("active"));
+    element.classList.add("active");
+
+    document.getElementById("pageTitle").innerText = element.innerText.trim();
+
+    addAudit(element.innerText.trim() + " opened");
+}
+
+function renderStudents() {
+    const search = document.getElementById("searchStudent").value.toLowerCase();
+    const filtered = students.filter(s =>
+        s.name.toLowerCase().includes(search) ||
+        s.id.toLowerCase().includes(search)
+    );
+
+    document.getElementById("studentTable").innerHTML = filtered.map(s => `
+        <tr>
+            <td>${escapeHTML(s.name)}</td>
+            <td>${escapeHTML(s.id)}</td>
+            <td>${escapeHTML(s.college)}</td>
+            <td>${escapeHTML(s.year)}</td>
+            <td><span class="status ${s.status === 'Validated' ? 'valid' : s.status === 'Pending' ? 'pending' : 'flagged'}">${s.status}</span></td>
+        </tr>
+    `).join("");
+}
+
+function escapeHTML(value) {
+    return String(value).replace(/[&<>"']/g, c => ({
+        '&':'&amp;', '<':'&lt;', '>':'&gt;',
+        '"':'&quot;', "'":'&#39;'
+    }[c]));
+}
+
+function addStudent() {
+    const name = document.getElementById("studentName").value.trim();
+    const id = document.getElementById("apaarId").value.trim();
+    const college = document.getElementById("college").value.trim();
+    const year = document.getElementById("year").value.trim();
+
+    if(!name || !id || !college || !year) {
+        alert("Please fill all fields");
+        return;
+    }
+
+    students.push({
+        name, id, college, year,
+        status: students.some(s => s.id === id) ? "Flagged" : "Pending"
+    });
+
+    renderStudents();
+    document.getElementById("totalStudents").innerText = 12480 + students.length - 4;
+    document.getElementById("studentForm").style.display = "none";
+
+    document.getElementById("studentName").value = "";
+    document.getElementById("apaarId").value = "";
+    document.getElementById("college").value = "";
+    document.getElementById("year").value = "";
+
+    addAudit("New student record added");
+    alert("Student added successfully!");
+}
+
+function verifyStudent() {
+    const id = document.getElementById("verifyId").value.trim();
+    const result = document.getElementById("verifyResult");
+
+    if(!id) {
+        result.innerText = "Please enter an APAAR ID.";
+        return;
+    }
+
+    const validFormat = /^\d{12}$/.test(id);
+
+    result.innerHTML = validFormat
+        ? '<span class="status valid">Format valid – Official verification pending</span>'
+        : '<span class="status flagged">Invalid format – Check the 12-digit ID</span>';
+
+    addAudit("APAAR ID format checked");
+}
+
+function detectDuplicates() {
+    const seen = new Set();
+    const duplicates = [];
+
+    students.forEach(s => {
+        if(seen.has(s.id)) duplicates.push(s);
+        else seen.add(s.id);
+    });
+
+    document.getElementById("duplicateResult").innerHTML =
+        duplicates.length
+        ? "<h4>Potential Duplicate Records</h4>" +
+          duplicates.map(s => `<p>${escapeHTML(s.name)} – ${escapeHTML(s.id)}</p>`).join("")
+        : "<p>No duplicate IDs detected in current demo records.</p>";
+
+    addAudit("Duplicate scan performed");
+}
+
+function uploadCertificate() {
+    const file = document.getElementById("certificateFile").files[0];
+
+    if(!file) {
+        alert("Please select a certificate.");
+        return;
+    }
+
+    const allowed = ["application/pdf","image/jpeg","image/png"];
+
+    if(!allowed.includes(file.type)) {
+        alert("Only PDF, JPG and PNG files are allowed.");
+        return;
+    }
+
+    document.getElementById("certificateResult").innerText =
+        "Selected for demo review: " + file.name +
+        ". No authenticity verification has been performed.";
+
+    addAudit("Certificate selected for demo review");
+}
+
+function addAudit(action) {
+    const table = document.getElementById("auditTable");
+    const row = table.insertRow(0);
+
+    row.innerHTML = `
+        <td>${escapeHTML(action)}</td>
+        <td>Admin</td>
+        <td>${new Date().toLocaleString()}</td>
+    `;
+}
+
+function downloadReport() {
+    const rows = [
+        ["Name","APAAR ID","College","Year","Status"],
+        ...students.map(s => [s.name,s.id,s.college,s.year,s.status])
+    ];
+
+    const csv = rows.map(row =>
+        row.map(cell => '"' + String(cell).replace(/"/g,'""') + '"').join(",")
+    ).join("\n");
+
+    const blob = new Blob([csv], {type:"text/csv"});
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "APAAR_Student_Report.csv";
+    a.click();
+
+    URL.revokeObjectURL(url);
+    addAudit("Student report downloaded");
+}
+
+renderStudents();
+
+</script>
+
+</body>
+</html>
